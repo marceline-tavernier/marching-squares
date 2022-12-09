@@ -22,10 +22,24 @@ void setup() {
   // No outline and fill white
   noStroke();
   fill(255);
+  
+  // Setup the noise
+  setup_noise();
 
+  // Setup the gird and noise
+  setup_grid();
+}
+
+// Setup the noise
+void setup_noise() {
+  
   // Create noise
-  noise = new OpenSimplexNoise();
+  noise = new OpenSimplexNoise(int(random(255)));
+}
 
+// Setup the gird
+void setup_grid() {
+  
   // Calculate the numbers of column and rows
   cols = 2 + width / res;
   rows = 2 + height / res;
@@ -185,6 +199,29 @@ void draw() {
       }
       endShape(CLOSE);
     }
+  }
+}
+
+// If a key is pressed
+void keyReleased() {
+
+  // If it is up, zoom
+  if (key == CODED && keyCode == UP) {
+    res += 1;
+    setup_grid();
+  }
+
+  // If it is down, dezoom
+  else if (key == CODED && keyCode == DOWN) {
+    if (res > 1) {
+      res -= 1;
+      setup_grid();
+    }
+  }
+  
+  // If it is R, reset the noise
+  else if (key == 'r' || key == 'R') {
+    setup_noise();
   }
 }
 
