@@ -1,8 +1,9 @@
 
 // Variables
 float[][] field;
-int res = 8;
+float res;
 int cols, rows;
+int rowCount = 64;
 float x, y, xoff, yoff, zoff = 0;
 float xyinc = 0.1, zinc = 0.01;
 PVector a, b, c, d, top, right, bottom, left;
@@ -22,27 +23,26 @@ void setup() {
   // No outline and fill white
   noStroke();
   fill(255);
-  
-  // Setup the noise
-  setup_noise();
 
   // Setup the gird and noise
+  setup_noise();
   setup_grid();
 }
 
 // Setup the noise
 void setup_noise() {
-  
+
   // Create noise
   noise = new OpenSimplexNoise(int(random(255)));
 }
 
 // Setup the gird
 void setup_grid() {
-  
-  // Calculate the numbers of column and rows
-  cols = 2 + width / res;
-  rows = 2 + height / res;
+
+  // Calculate the numbers of column and rows and resolution
+  rows = rowCount + 2;
+  cols = 2 * rowCount + 2;
+  res = height / float(rowCount);
 
   // Initialize the field
   field = new float[cols][rows];
@@ -73,14 +73,15 @@ void draw() {
     for (int j = 0; j < rows - 1; j++) {
 
       // Set x and y position of the square
-      x = i * res;
-      y = j * res;
+      x = floor(i * res);
+      y = floor(j * res);
+      int resCeil = ceil(res);
 
       // Set the corner of the square
       a = new PVector(x, y);
-      b = new PVector(x + res, y);
-      c = new PVector(x + res, y + res);
-      d = new PVector(x, y + res);
+      b = new PVector(x + resCeil, y);
+      c = new PVector(x + resCeil, y + resCeil);
+      d = new PVector(x, y + resCeil);
 
       // If we want a blocky style, don't lerp
       if (blocky) {
@@ -207,21 +208,27 @@ void keyReleased() {
 
   // If it is up, zoom
   if (key == CODED && keyCode == UP) {
-    res += 1;
-    setup_grid();
+    if (rowCount > 1) {
+      rowCount -= 1;
+      setup_grid();
+    }
   }
 
   // If it is down, dezoom
   else if (key == CODED && keyCode == DOWN) {
-    if (res > 1) {
-      res -= 1;
-      setup_grid();
-    }
+    rowCount += 1;
+    setup_grid();
   }
-  
+
   // If it is R, reset the noise
   else if (key == 'r' || key == 'R') {
     setup_noise();
+  }
+
+  // If it is S, reset to the start size
+  else if (key == 's' || key == 'S') {
+    rowCount = 64;
+    setup_grid();
   }
 }
 

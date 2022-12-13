@@ -6,8 +6,9 @@ The coding train cabana #5 : Marching squares
 ## Description
 - Visualize the marching squares algorithm with OpenSimplex noise
 - You can click to see the marching squares without smoothing
-- You can zoom in and out with the 'Up' and 'Down' arrows
 - You can change the noise with 'R'
+- You can zoom in and out with the 'Up' and 'Down' arrows
+- You can resize the marching squares like it was at the start with 'S'
 
 ## Details
 | Programming language | Start and end date | Inspired by |
